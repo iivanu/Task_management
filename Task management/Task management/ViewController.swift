@@ -14,6 +14,7 @@ class ViewController: UITableViewController, AddTaskViewControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Task management"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTaskTapped))
         
         fetchData()
