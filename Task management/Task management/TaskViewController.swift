@@ -26,26 +26,7 @@ class TaskViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard let actionType = actionType else { return }
-        switch actionType {
-        case .add:
-            self.title = "Add task"
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneTapped))
-            return
-        case .view:
-            self.title = "Task detail"
-            self.nameField.isUserInteractionEnabled = false
-            self.moreInfoField.isUserInteractionEnabled = false
-            self.nameField.text = self.name!
-            self.moreInfoField.text = self.more_info!
-            return
-        case .update:
-            self.title = "Edit task"
-            self.nameField.text = self.name!
-            self.moreInfoField.text = self.more_info!
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneTapped))
-            return
-        }
+        setUI()
     }
     
     @objc func doneTapped() {
@@ -67,5 +48,36 @@ class TaskViewController: UIViewController {
         }
         
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    
+    func setUI() {
+        nameField.layer.borderWidth = 1
+        moreInfoField.layer.borderWidth = 1
+        nameField.layer.cornerRadius = 5
+        moreInfoField.layer.cornerRadius = 5
+        nameField.layer.borderColor = nameField.textColor?.cgColor
+        moreInfoField.layer.borderColor = moreInfoField.textColor?.cgColor
+        
+        guard let actionType = actionType else { return }
+        switch actionType {
+        case .add:
+            self.title = "Add task"
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneTapped))
+            return
+        case .view:
+            self.title = "Task detail"
+            self.nameField.isUserInteractionEnabled = false
+            self.moreInfoField.isUserInteractionEnabled = false
+            self.nameField.text = self.name!
+            self.moreInfoField.text = self.more_info!
+            return
+        case .update:
+            self.title = "Edit task"
+            self.nameField.text = self.name!
+            self.moreInfoField.text = self.more_info!
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneTapped))
+            return
+        }
     }
 }
