@@ -17,7 +17,6 @@ class TaskViewController: UIViewController {
     @IBOutlet weak var moreInfoField: UITextView!
     
     var delegate: TaskViewControllerDelegate?
-    
     var actionType: ActionType?
     var name: String?
     var more_info: String?
@@ -55,13 +54,13 @@ class TaskViewController: UIViewController {
             self.title = "Task detail"
             self.nameField.isUserInteractionEnabled = false
             self.moreInfoField.isUserInteractionEnabled = false
-            self.nameField.text = self.name!
-            self.moreInfoField.text = self.more_info!
+            self.nameField.text = self.name ?? ""
+            self.moreInfoField.text = self.more_info ?? ""
             return
         case .update:
             self.title = "Edit task"
-            self.nameField.text = self.name!
-            self.moreInfoField.text = self.more_info!
+            self.nameField.text = self.name ?? ""
+            self.moreInfoField.text = self.more_info ?? ""
             self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneTapped))
             return
         }

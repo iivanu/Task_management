@@ -14,12 +14,12 @@ enum ActionType: Int {
 }
 
 class ViewController: UITableViewController {
-    var items: [Task]?
+    var items = [Task]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     @IBOutlet weak var searchBar: UISearchBar!
     var searching = false
-    var searchedItems: [Task]?
+    var searchedItems = [Task]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,21 +32,19 @@ class ViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if self.searching {
-            return self.searchedItems!.count
-        } else if let items = self.items {
-            return items.count
+            return self.searchedItems.count
         }
         
-        return 0
+        return items.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         var task: Task
         if self.searching {
-            task = self.searchedItems![indexPath.row]
+            task = self.searchedItems[indexPath.row]
         } else {
-            task = self.items![indexPath.row]
+            task = self.items[indexPath.row]
         }
         cell.textLabel?.text = task.name
         return cell
@@ -55,7 +53,7 @@ class ViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         if !self.searching {
             let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completionHandler) in
-                let taskToRemove = self.items![indexPath.row]
+                let taskToRemove = self.items[indexPath.row]
                 self.context.delete(taskToRemove)
                 
                 self.saveAndReloadData()
@@ -66,8 +64,8 @@ class ViewController: UITableViewController {
                     return
                 }
                 vc.actionType = .update
-                vc.name = self.items![indexPath.row].name
-                vc.more_info = self.items![indexPath.row].more_info
+                vc.name = self.items[indexPath.row].name
+                vc.more_info = self.items[indexPath.row].more_info
                 vc.index = indexPath.row
                 vc.delegate = self
                 self.navigationController?.pushViewController(vc, animated: true)
@@ -85,11 +83,11 @@ class ViewController: UITableViewController {
         
         vc.actionType = .view
         if self.searching {
-            vc.name = self.searchedItems![indexPath.row].name
-            vc.more_info = self.searchedItems![indexPath.row].more_info
+            vc.name = self.searchedItems[indexPath.row].name
+            vc.more_info = self.searchedItems[indexPath.row].more_info
         } else {
-            vc.name = self.items![indexPath.row].name
-            vc.more_info = self.items![indexPath.row].more_info
+            vc.name = self.items[indexPath.row].name
+            vc.more_info = self.items[indexPath.row].more_info
         }
 
         self.navigationController?.pushViewController(vc, animated: true)
@@ -116,7 +114,7 @@ extension ViewController: TaskViewControllerDelegate {
     }
     
     func editTask(taskName: String, taskMoreinfo: String, taskPosition: Int) {
-        let task = self.items![taskPosition]
+        let task = self.items[taskPosition]
         task.name = taskName
         task.more_info = taskMoreinfo
         
@@ -126,7 +124,6 @@ extension ViewController: TaskViewControllerDelegate {
 
 extension ViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        guard let items = self.items else { return }
         self.searchedItems = items.filter { $0.name!.lowercased().prefix(searchText.count) == searchText.lowercased() }
         self.searching = true
         tableView.reloadData()
