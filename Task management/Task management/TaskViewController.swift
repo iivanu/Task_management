@@ -29,6 +29,15 @@ class TaskViewController: UIViewController {
         setUI()
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if #available(iOS 13.0, *) {
+            if (traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection)) {
+                nameField.layer.borderColor = nameField.textColor?.cgColor
+                moreInfoField.layer.borderColor = moreInfoField.textColor?.cgColor
+            }
+        }
+    }
+    
     @objc func doneTapped() {
         guard let name = self.nameField.text else { return }
         if name == "" {
