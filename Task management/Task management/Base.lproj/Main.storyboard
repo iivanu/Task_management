@@ -62,8 +62,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" text="Tell me more about the task.." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="WQ1-ce-pEA">
-                                <rect key="frame" x="48" y="247" width="318" height="353"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Tell me more about the task.." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="WQ1-ce-pEA">
+                                <rect key="frame" x="48" y="247" width="318" height="345"/>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -75,7 +75,7 @@
                             <constraint firstItem="XAe-kD-ZBm" firstAttribute="top" secondItem="J1T-Qb-BLM" secondAttribute="top" constant="56" id="2Gy-3c-9aB"/>
                             <constraint firstItem="XAe-kD-ZBm" firstAttribute="centerX" secondItem="J1T-Qb-BLM" secondAttribute="centerX" id="4VC-AG-N4d"/>
                             <constraint firstItem="svW-0s-OlU" firstAttribute="leading" secondItem="J1T-Qb-BLM" secondAttribute="leading" constant="48" id="78h-yY-HER"/>
-                            <constraint firstItem="J1T-Qb-BLM" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="WQ1-ce-pEA" secondAttribute="bottom" constant="262" id="BbE-Mg-Szd"/>
+                            <constraint firstItem="J1T-Qb-BLM" firstAttribute="bottom" secondItem="WQ1-ce-pEA" secondAttribute="bottom" constant="270" id="BbE-Mg-Szd"/>
                             <constraint firstItem="J1T-Qb-BLM" firstAttribute="trailing" secondItem="WQ1-ce-pEA" secondAttribute="trailing" constant="48" id="KYm-WH-cIO"/>
                             <constraint firstItem="J1T-Qb-BLM" firstAttribute="trailing" secondItem="svW-0s-OlU" secondAttribute="trailing" constant="48" id="MHA-He-ish"/>
                             <constraint firstItem="S3U-Nr-Gsn" firstAttribute="top" secondItem="svW-0s-OlU" secondAttribute="bottom" constant="55" id="N8m-4O-Hh9"/>

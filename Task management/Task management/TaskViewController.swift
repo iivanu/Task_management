@@ -32,8 +32,8 @@ class TaskViewController: UIViewController {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         if #available(iOS 13.0, *) {
             if (traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection)) {
-                nameField.layer.borderColor = nameField.textColor?.cgColor
-                moreInfoField.layer.borderColor = moreInfoField.textColor?.cgColor
+                self.nameField.layer.borderColor = self.nameField.textColor?.cgColor
+                self.moreInfoField.layer.borderColor = self.moreInfoField.textColor?.cgColor
             }
         }
     }
@@ -61,12 +61,12 @@ class TaskViewController: UIViewController {
     
     
     func setUI() {
-        nameField.layer.borderWidth = 1
-        moreInfoField.layer.borderWidth = 1
-        nameField.layer.cornerRadius = 5
-        moreInfoField.layer.cornerRadius = 5
-        nameField.layer.borderColor = nameField.textColor?.cgColor
-        moreInfoField.layer.borderColor = moreInfoField.textColor?.cgColor
+        self.nameField.layer.borderWidth = 1
+        self.moreInfoField.layer.borderWidth = 1
+        self.nameField.layer.cornerRadius = 5
+        self.moreInfoField.layer.cornerRadius = 5
+        self.nameField.layer.borderColor = self.nameField.textColor?.cgColor
+        self.moreInfoField.layer.borderColor = self.moreInfoField.textColor?.cgColor
         
         guard let actionType = actionType else { return }
         switch actionType {
