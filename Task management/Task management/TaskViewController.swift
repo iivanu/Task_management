@@ -25,8 +25,7 @@ class TaskViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setUI()
+        self.setUI()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -35,6 +34,36 @@ class TaskViewController: UIViewController {
                 self.nameField.layer.borderColor = self.nameField.textColor?.cgColor
                 self.moreInfoField.layer.borderColor = self.moreInfoField.textColor?.cgColor
             }
+        }
+    }
+    
+    func setUI() {
+        self.nameField.layer.borderWidth = 1
+        self.moreInfoField.layer.borderWidth = 1
+        self.nameField.layer.cornerRadius = 5
+        self.moreInfoField.layer.cornerRadius = 5
+        self.nameField.layer.borderColor = self.nameField.textColor?.cgColor
+        self.moreInfoField.layer.borderColor = self.moreInfoField.textColor?.cgColor
+        
+        guard let actionType = self.actionType else { return }
+        switch actionType {
+        case .add:
+            self.title = "Add task"
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneTapped))
+            return
+        case .view:
+            self.title = "Task detail"
+            self.nameField.isUserInteractionEnabled = false
+            self.moreInfoField.isUserInteractionEnabled = false
+            self.nameField.text = self.name!
+            self.moreInfoField.text = self.more_info!
+            return
+        case .update:
+            self.title = "Edit task"
+            self.nameField.text = self.name!
+            self.moreInfoField.text = self.more_info!
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneTapped))
+            return
         }
     }
     
@@ -57,36 +86,5 @@ class TaskViewController: UIViewController {
         }
         
         self.navigationController?.popViewController(animated: true)
-    }
-    
-    
-    func setUI() {
-        self.nameField.layer.borderWidth = 1
-        self.moreInfoField.layer.borderWidth = 1
-        self.nameField.layer.cornerRadius = 5
-        self.moreInfoField.layer.cornerRadius = 5
-        self.nameField.layer.borderColor = self.nameField.textColor?.cgColor
-        self.moreInfoField.layer.borderColor = self.moreInfoField.textColor?.cgColor
-        
-        guard let actionType = actionType else { return }
-        switch actionType {
-        case .add:
-            self.title = "Add task"
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneTapped))
-            return
-        case .view:
-            self.title = "Task detail"
-            self.nameField.isUserInteractionEnabled = false
-            self.moreInfoField.isUserInteractionEnabled = false
-            self.nameField.text = self.name!
-            self.moreInfoField.text = self.more_info!
-            return
-        case .update:
-            self.title = "Edit task"
-            self.nameField.text = self.name!
-            self.moreInfoField.text = self.more_info!
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneTapped))
-            return
-        }
     }
 }
