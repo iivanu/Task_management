@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		99739A08258D194200F772D8 /* AddTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99739A07258D194200F772D8 /* AddTaskViewController.swift */; };
+		99739A08258D194200F772D8 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99739A07258D194200F772D8 /* TaskViewController.swift */; };
 		9995B69F258CFAAF009DA90A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9995B69E258CFAAF009DA90A /* AppDelegate.swift */; };
 		9995B6A1258CFAAF009DA90A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9995B6A0258CFAAF009DA90A /* SceneDelegate.swift */; };
 		9995B6A3258CFAAF009DA90A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9995B6A2258CFAAF009DA90A /* ViewController.swift */; };
@@ -20,7 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		99739A07258D194200F772D8 /* AddTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
+		99739A07258D194200F772D8 /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		9995B69B258CFAAF009DA90A /* Task management.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Task management.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9995B69E258CFAAF009DA90A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9995B6A0258CFAAF009DA90A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -68,7 +68,7 @@
 				9995B69E258CFAAF009DA90A /* AppDelegate.swift */,
 				9995B6A0258CFAAF009DA90A /* SceneDelegate.swift */,
 				9995B6A2258CFAAF009DA90A /* ViewController.swift */,
-				99739A07258D194200F772D8 /* AddTaskViewController.swift */,
+				99739A07258D194200F772D8 /* TaskViewController.swift */,
 				9995B6A4258CFAAF009DA90A /* Main.storyboard */,
 				9995B6AA258CFAB0009DA90A /* Assets.xcassets */,
 				9995B6AC258CFAB0009DA90A /* LaunchScreen.storyboard */,
@@ -163,7 +163,7 @@
 				9995B6A1258CFAAF009DA90A /* SceneDelegate.swift in Sources */,
 				9995B6B9258CFD28009DA90A /* Task+CoreDataProperties.swift in Sources */,
 				9995B6A9258CFAAF009DA90A /* Task_management.xcdatamodeld in Sources */,
-				99739A08258D194200F772D8 /* AddTaskViewController.swift in Sources */,
+				99739A08258D194200F772D8 /* TaskViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

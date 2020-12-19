@@ -7,17 +7,23 @@
 
 import UIKit
 
-class ViewController: UITableViewController, AddTaskViewControllerDelegate {
+enum ActionType: Int {
+    case add
+    case view
+    case update
+}
+
+class ViewController: UITableViewController, TaskViewControllerDelegate {
     
     var items: [Task]?
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Task management"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTaskTapped))
+        self.title = "Task management"
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTaskTapped))
         
-        fetchData()
+        self.fetchData()
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -34,22 +40,46 @@ class ViewController: UITableViewController, AddTaskViewControllerDelegate {
     }
     
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let action = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completionHandler) in
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completionHandler) in
             let taskToRemove = self.items![indexPath.row]
             self.context.delete(taskToRemove)
             
             self.saveAndReloadData()
         }
         
-        return UISwipeActionsConfiguration(actions: [action])
+        let editAction = UIContextualAction(style: .normal, title: "Edit") { (action, view, completionHandler) in
+            guard let vc = self.storyboard?.instantiateViewController(identifier: "Task") as? TaskViewController else {
+                return
+            }
+            
+            vc.actionType = .update
+            vc.name = self.items![indexPath.row].name
+            vc.more_info = self.items![indexPath.row].more_info
+            vc.index = indexPath.row
+            vc.delegate = self
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
+        return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let vc = storyboard?.instantiateViewController(identifier: "Task") as? TaskViewController else {
+            return
+        }
+        
+        vc.actionType = .view
+        vc.name = self.items![indexPath.row].name
+        vc.more_info = self.items![indexPath.row].more_info
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func saveAndReloadData() {
         do {
             try self.context.save()
         } catch {
-            
         }
+        
         self.fetchData()
     }
     
@@ -60,23 +90,31 @@ class ViewController: UITableViewController, AddTaskViewControllerDelegate {
                 self.tableView.reloadData()
             }
         } catch {
-            
         }
     }
     
-    func addTask(data: [String]) {
+    func addTask(taskName: String, taskMoreinfo: String) {
         let newTask = Task(context: self.context)
-        newTask.name = data[0]
-        newTask.more_info = data[1]
+        newTask.name = taskName
+        newTask.more_info = taskMoreinfo
+        
+        self.saveAndReloadData()
+    }
+    
+    func editTask(taskName: String, taskMoreinfo: String, taskPosition: Int) {
+        let task = self.items![taskPosition]
+        task.name = taskName
+        task.more_info = taskMoreinfo
         
         self.saveAndReloadData()
     }
     
     @objc func addTaskTapped() {
-        guard let vc = storyboard?.instantiateViewController(identifier: "AddTask") as? AddTaskViewController else {
+        guard let vc = storyboard?.instantiateViewController(identifier: "Task") as? TaskViewController else {
             return
         }
         
+        vc.actionType = .add
         vc.delegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
