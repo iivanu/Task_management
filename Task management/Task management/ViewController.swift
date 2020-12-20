@@ -18,14 +18,16 @@ class ViewController: UITableViewController {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     @IBOutlet weak var searchBar: UISearchBar!
-    var searching = false
     var searchedItems = [Task]()
+    var searching = false
+    var reordering = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Task management"
         self.searchBar.delegate = self
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTaskTapped))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Reorder", style: .plain, target: self, action: #selector(reorderTapped))
         
         self.fetchData()
     }
@@ -93,14 +95,18 @@ class ViewController: UITableViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    @objc func addTaskTapped() {
-        guard let vc = storyboard?.instantiateViewController(identifier: "Task") as? TaskViewController else {
-            return
-        }
-        
-        vc.actionType = .add
-        vc.delegate = self
-        self.navigationController?.pushViewController(vc, animated: true)
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .none
+    }
+    
+    override func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+    
+    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let movedTask = self.items[sourceIndexPath.row]
+        self.items.remove(at: sourceIndexPath.row)
+        self.items.insert(movedTask, at: destinationIndexPath.row)
     }
 }
 
@@ -155,5 +161,19 @@ extension ViewController {
             }
         } catch {
         }
+    }
+    
+    @objc func addTaskTapped() {
+        guard let vc = storyboard?.instantiateViewController(identifier: "Task") as? TaskViewController else {
+            return
+        }
+        
+        vc.actionType = .add
+        vc.delegate = self
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func reorderTapped() {
+        self.tableView.isEditing.toggle()
     }
 }
