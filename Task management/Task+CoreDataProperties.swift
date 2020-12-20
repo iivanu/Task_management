@@ -2,7 +2,7 @@
 //  Task+CoreDataProperties.swift
 //  Task management
 //
-//  Created by Ivan Ivanušić on 18.12.2020..
+//  Created by Ivan Ivanušić on 20.12.2020..
 //
 //
 
@@ -16,8 +16,9 @@ extension Task {
         return NSFetchRequest<Task>(entityName: "Task")
     }
 
-    @NSManaged public var name: String?
     @NSManaged public var more_info: String?
+    @NSManaged public var name: String?
+    @NSManaged public var order_id: Int32
 
 }
 

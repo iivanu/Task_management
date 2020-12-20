@@ -20,6 +20,7 @@ class ViewController: UITableViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     var searchedItems = [Task]()
     var searching = false
+    
     var reordering = false
     
     override func viewDidLoad() {
@@ -107,6 +108,8 @@ class ViewController: UITableViewController {
         let movedTask = self.items[sourceIndexPath.row]
         self.items.remove(at: sourceIndexPath.row)
         self.items.insert(movedTask, at: destinationIndexPath.row)
+        
+        rewriteOrderNums()
     }
 }
 
@@ -117,6 +120,7 @@ extension ViewController: TaskViewControllerDelegate {
         newTask.more_info = taskMoreinfo
         
         self.saveAndReloadData()
+        rewriteOrderNums()
     }
     
     func editTask(taskName: String, taskMoreinfo: String, taskPosition: Int) {
@@ -156,11 +160,20 @@ extension ViewController {
     func fetchData() {
         do {
             self.items = try context.fetch(Task.fetchRequest())
+            self.items.sort(by: { $0.order_id < $1.order_id })
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
         } catch {
         }
+    }
+    
+    func rewriteOrderNums() {
+        for index in 0..<self.items.count {
+            self.items[index].order_id = Int32(index)
+        }
+        
+        self.saveAndReloadData()
     }
     
     @objc func addTaskTapped() {

@@ -2,7 +2,7 @@
 //  Task+CoreDataClass.swift
 //  Task management
 //
-//  Created by Ivan Ivanušić on 18.12.2020..
+//  Created by Ivan Ivanušić on 20.12.2020..
 //
 //
 
