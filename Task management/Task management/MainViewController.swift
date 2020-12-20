@@ -13,7 +13,7 @@ enum ActionType: Int {
     case update
 }
 
-class ViewController: UITableViewController {
+class MainViewController: UITableViewController {
     private var items = [Task]()
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -113,7 +113,7 @@ class ViewController: UITableViewController {
     }
 }
 
-extension ViewController: TaskViewControllerDelegate {
+extension MainViewController: TaskViewControllerDelegate {
     func addTask(taskName: String, taskMoreinfo: String) {
         let newTask = Task(context: self.context)
         newTask.name = taskName
@@ -133,7 +133,7 @@ extension ViewController: TaskViewControllerDelegate {
     }
 }
 
-extension ViewController: UISearchBarDelegate {
+extension MainViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         self.searchedItems = items.filter { $0.name!.lowercased().prefix(searchText.count) == searchText.lowercased() }
         self.searching = true
@@ -148,7 +148,7 @@ extension ViewController: UISearchBarDelegate {
     }
 }
 
-extension ViewController {
+extension MainViewController {
     func saveAndReloadData() {
         do {
             try self.context.save()
