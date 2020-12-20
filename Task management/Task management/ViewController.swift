@@ -14,14 +14,14 @@ enum ActionType: Int {
 }
 
 class ViewController: UITableViewController {
-    var items = [Task]()
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    private var items = [Task]()
+    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     @IBOutlet weak var searchBar: UISearchBar!
-    var searchedItems = [Task]()
-    var searching = false
+    private var searchedItems = [Task]()
+    private var searching = false
     
-    var reordering = false
+    private var reordering = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,17 +59,17 @@ class ViewController: UITableViewController {
                 let taskToRemove = self.items[indexPath.row]
                 self.context.delete(taskToRemove)
                 
-                self.saveAndReloadData()
+                self.rewriteOrderNums()
             }
             
             let editAction = UIContextualAction(style: .normal, title: "Edit") { (action, view, completionHandler) in
                 guard let vc = self.storyboard?.instantiateViewController(identifier: "Task") as? TaskViewController else {
                     return
                 }
-                vc.actionType = .update
-                vc.name = self.items[indexPath.row].name
-                vc.more_info = self.items[indexPath.row].more_info
-                vc.index = indexPath.row
+                vc.setActionType(actionType: .update)
+                vc.setName(name: self.items[indexPath.row].name)
+                vc.setMoreInfo(more_info: self.items[indexPath.row].more_info)
+                vc.setIndex(index: indexPath.row)
                 vc.delegate = self
                 self.navigationController?.pushViewController(vc, animated: true)
             }
@@ -84,13 +84,13 @@ class ViewController: UITableViewController {
             return
         }
         
-        vc.actionType = .view
+        vc.setActionType(actionType: .view)
         if self.searching {
-            vc.name = self.searchedItems[indexPath.row].name
-            vc.more_info = self.searchedItems[indexPath.row].more_info
+            vc.setName(name: self.searchedItems[indexPath.row].name)
+            vc.setMoreInfo(more_info: self.searchedItems[indexPath.row].more_info)
         } else {
-            vc.name = self.items[indexPath.row].name
-            vc.more_info = self.items[indexPath.row].more_info
+            vc.setName(name: self.items[indexPath.row].name)
+            vc.setMoreInfo(more_info: self.items[indexPath.row].more_info)
         }
 
         self.navigationController?.pushViewController(vc, animated: true)
@@ -118,6 +118,7 @@ extension ViewController: TaskViewControllerDelegate {
         let newTask = Task(context: self.context)
         newTask.name = taskName
         newTask.more_info = taskMoreinfo
+        newTask.order_id = Int32(items.count)
         
         self.saveAndReloadData()
         rewriteOrderNums()
@@ -176,17 +177,17 @@ extension ViewController {
         self.saveAndReloadData()
     }
     
-    @objc func addTaskTapped() {
+    @objc private func addTaskTapped() {
         guard let vc = storyboard?.instantiateViewController(identifier: "Task") as? TaskViewController else {
             return
         }
         
-        vc.actionType = .add
+        vc.setActionType(actionType: .add)
         vc.delegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    @objc func reorderTapped() {
+    @objc private func reorderTapped() {
         self.tableView.isEditing.toggle()
     }
 }

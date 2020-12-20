@@ -1,9 +1,10 @@
 # Task management
 
-Simple task management app, completely written in Swift 5.3. The design is made using storyboard, consisting of the elements: TableViewController, SearchController Text Field, Text Label and Text View. Data is saved using Core Data framework.
+Simple task management app, completely written in Swift 5.3. The design is made using storyboard, consisting of the elements: TableViewController, SearchController, Text Field, Text Label and Text View. Data is saved using Core Data framework.
 
 # Compatibility
 The app is compatible with iPhone and iPad devices.
+The app is locked in the portrait mode.
 Tested on iOS 14.3 and XCode 12.3.
 Tested on iPhone Xs Max.
 

@@ -17,10 +17,10 @@ class TaskViewController: UIViewController {
     @IBOutlet weak var moreInfoField: UITextView!
     
     var delegate: TaskViewControllerDelegate?
-    var actionType: ActionType?
-    var name: String?
-    var more_info: String?
-    var index: Int?
+    private var actionType: ActionType?
+    private var name: String?
+    private var more_info: String?
+    private var index: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,5 +85,23 @@ class TaskViewController: UIViewController {
         }
         
         self.navigationController?.popViewController(animated: true)
+    }
+}
+
+extension TaskViewController {
+    func setActionType(actionType: ActionType?) {
+        self.actionType = actionType
+    }
+    
+    func setName(name: String?) {
+        self.name = name
+    }
+    
+    func setMoreInfo(more_info: String?) {
+        self.more_info = more_info
+    }
+    
+    func setIndex(index: Int?) {
+        self.index = index
     }
 }
