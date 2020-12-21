@@ -54,29 +54,37 @@ class MainViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        if !self.searching {
-            let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completionHandler) in
-                let taskToRemove = self.items[indexPath.row]
-                self.context.delete(taskToRemove)
-                
-                self.rewriteOrderNums()
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completionHandler) in
+            var taskToRemove: Task
+            if self.searching {
+                taskToRemove = self.searchedItems[indexPath.row]
+            } else {
+                taskToRemove = self.items[indexPath.row]
             }
+            self.context.delete(taskToRemove)
             
-            let editAction = UIContextualAction(style: .normal, title: "Edit") { (action, view, completionHandler) in
-                guard let vc = self.storyboard?.instantiateViewController(identifier: "Task") as? TaskViewController else {
-                    return
-                }
-                vc.setActionType(actionType: .update)
-                vc.setName(name: self.items[indexPath.row].name)
-                vc.setMoreInfo(more_info: self.items[indexPath.row].more_info)
-                vc.setIndex(index: indexPath.row)
-                vc.delegate = self
-                self.navigationController?.pushViewController(vc, animated: true)
-            }
-            return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
+            self.rewriteOrderNums()
         }
         
-        return nil
+        let editAction = UIContextualAction(style: .normal, title: "Edit") { (action, view, completionHandler) in
+            guard let vc = self.storyboard?.instantiateViewController(identifier: "Task") as? TaskViewController else {
+                return
+            }
+            var index: Int
+            if self.searching {
+                index = Int(self.searchedItems[indexPath.row].order_id)
+            } else {
+                index = indexPath.row
+            }
+            vc.setActionType(actionType: .update)
+            vc.delegate = self
+            vc.setName(name: self.items[index].name)
+            vc.setMoreInfo(more_info: self.items[index].more_info)
+            vc.setIndex(index: index)
+            
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -171,7 +179,9 @@ extension MainViewController {
     
     func rewriteOrderNums() {
         for index in 0..<self.items.count {
-            self.items[index].order_id = Int32(index)
+            if self.items[index].order_id != Int32(index) {
+                self.items[index].order_id = Int32(index)
+            }
         }
         
         self.saveAndReloadData()
