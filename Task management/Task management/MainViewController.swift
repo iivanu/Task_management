@@ -65,7 +65,10 @@ class MainViewController: UITableViewController {
             
             self.rewriteOrderNums()
         }
-        
+        return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
+    
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let editAction = UIContextualAction(style: .normal, title: "Edit") { (action, view, completionHandler) in
             guard let vc = self.storyboard?.instantiateViewController(identifier: "Task") as? TaskViewController else {
                 return
@@ -84,7 +87,7 @@ class MainViewController: UITableViewController {
             
             self.navigationController?.pushViewController(vc, animated: true)
         }
-        return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
+        return UISwipeActionsConfiguration(actions: [editAction])
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
