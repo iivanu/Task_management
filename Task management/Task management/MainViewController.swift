@@ -58,6 +58,7 @@ class MainViewController: UITableViewController {
             var taskToRemove: Task
             if self.searching {
                 taskToRemove = self.searchedItems[indexPath.row]
+                self.searchedItems.remove(at: indexPath.row)
             } else {
                 taskToRemove = self.items[indexPath.row]
             }
