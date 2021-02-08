@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol TaskViewControllerDelegate {
+protocol TaskViewControllerDelegate: class {
     func addTask(taskName: String, taskMoreinfo: String)
     func editTask(taskName: String, taskMoreinfo: String, taskPosition: Int)
 }
@@ -16,7 +16,7 @@ class TaskViewController: UIViewController {
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var moreInfoField: UITextView!
     
-    var delegate: TaskViewControllerDelegate?
+    weak var delegate: TaskViewControllerDelegate?
     private var actionType: ActionType?
     private var name: String?
     private var more_info: String?
@@ -50,14 +50,7 @@ class TaskViewController: UIViewController {
             self.title = "Add task"
             self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneTapped))
             return
-        case .view:
-            self.title = "Task detail"
-            self.nameField.isUserInteractionEnabled = false
-            self.moreInfoField.isUserInteractionEnabled = false
-            self.nameField.text = self.name ?? ""
-            self.moreInfoField.text = self.more_info ?? ""
-            return
-        case .update:
+        case .readAndUpdate:
             self.title = "Edit task"
             self.nameField.text = self.name ?? ""
             self.moreInfoField.text = self.more_info ?? ""
@@ -74,17 +67,17 @@ class TaskViewController: UIViewController {
             self.present(ac, animated: true)
             return
         }
-
+        
         switch self.actionType {
         case .add:
             self.delegate?.addTask(taskName: name, taskMoreinfo: self.moreInfoField.text)
-        case .update:
+        case .readAndUpdate:
             self.delegate?.editTask(taskName: name, taskMoreinfo: self.moreInfoField.text, taskPosition: self.index!)
         default:
             return
         }
         
-        self.navigationController?.popViewController(animated: true)
+        self.dismiss(animated: true)
     }
 }
 

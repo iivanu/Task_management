@@ -9,8 +9,7 @@ import UIKit
 
 enum ActionType: Int {
     case add
-    case view
-    case update
+    case readAndUpdate
 }
 
 class MainViewController: UITableViewController {
@@ -21,14 +20,12 @@ class MainViewController: UITableViewController {
     private var searchedItems = [Task]()
     private var searching = false
     
-    private var reordering = false
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Task management"
         self.searchBar.delegate = self
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTaskTapped))
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Reorder", style: .plain, target: self, action: #selector(reorderTapped))
+        self.navigationItem.leftBarButtonItem = editButtonItem
         
         self.fetchData()
     }
@@ -63,49 +60,30 @@ class MainViewController: UITableViewController {
                 taskToRemove = self.items[indexPath.row]
             }
             self.context.delete(taskToRemove)
-            
             self.rewriteOrderNums()
         }
         return UISwipeActionsConfiguration(actions: [deleteAction])
-    }
-    
-    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let editAction = UIContextualAction(style: .normal, title: "Edit") { (action, view, completionHandler) in
-            guard let vc = self.storyboard?.instantiateViewController(identifier: "Task") as? TaskViewController else {
-                return
-            }
-            var index: Int
-            if self.searching {
-                index = Int(self.searchedItems[indexPath.row].order_id)
-            } else {
-                index = indexPath.row
-            }
-            vc.setActionType(actionType: .update)
-            vc.delegate = self
-            vc.setName(name: self.items[index].name)
-            vc.setMoreInfo(more_info: self.items[index].more_info)
-            vc.setIndex(index: index)
-            
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
-        return UISwipeActionsConfiguration(actions: [editAction])
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let vc = storyboard?.instantiateViewController(identifier: "Task") as? TaskViewController else {
             return
         }
+        let navBarOnVC: UINavigationController = UINavigationController(rootViewController: vc)
         
-        vc.setActionType(actionType: .view)
+        var index: Int
         if self.searching {
-            vc.setName(name: self.searchedItems[indexPath.row].name)
-            vc.setMoreInfo(more_info: self.searchedItems[indexPath.row].more_info)
+            index = Int(self.searchedItems[indexPath.row].order_id)
         } else {
-            vc.setName(name: self.items[indexPath.row].name)
-            vc.setMoreInfo(more_info: self.items[indexPath.row].more_info)
+            index = indexPath.row
         }
-
-        self.navigationController?.pushViewController(vc, animated: true)
+        vc.setActionType(actionType: .readAndUpdate)
+        vc.delegate = self
+        vc.setName(name: self.items[index].name)
+        vc.setMoreInfo(more_info: self.items[index].more_info)
+        vc.setIndex(index: index)
+        
+        self.navigationController?.present(navBarOnVC, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
@@ -130,9 +108,8 @@ extension MainViewController: TaskViewControllerDelegate {
         let newTask = Task(context: self.context)
         newTask.name = taskName
         newTask.more_info = taskMoreinfo
-        newTask.order_id = Int32(items.count)
+        newTask.order_id = Int32(self.items.count + 1)
         
-        self.saveAndReloadData()
         rewriteOrderNums()
     }
     
@@ -195,13 +172,10 @@ extension MainViewController {
         guard let vc = storyboard?.instantiateViewController(identifier: "Task") as? TaskViewController else {
             return
         }
+        let navBarOnVC: UINavigationController = UINavigationController(rootViewController: vc)
         
         vc.setActionType(actionType: .add)
         vc.delegate = self
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    @objc private func reorderTapped() {
-        self.tableView.isEditing.toggle()
+        self.present(navBarOnVC, animated: true, completion: nil)
     }
 }
